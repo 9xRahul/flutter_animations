@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Activity> activities = [];
 
+  double targetValue = 24;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -83,6 +85,23 @@ class _HomePageState extends State<HomePage> {
                   return buildCard(activity);
                 },
               ),
+            ),
+            TweenAnimationBuilder(
+              duration: Duration(seconds: 1),
+              tween: Tween<double>(begin: 0, end: targetValue),
+              child: Icon(Icons.favorite),
+              builder: (context, value, child) {
+                return IconButton(
+                  iconSize: value,
+                  color: Colors.redAccent,
+                  onPressed: () {
+                    setState(() {
+                      targetValue = targetValue == 24 ? 48 : 24;
+                    });
+                  },
+                  icon: child!,
+                );
+              },
             ),
           ],
         ),

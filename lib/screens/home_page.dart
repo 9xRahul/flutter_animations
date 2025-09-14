@@ -11,14 +11,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Activity> activities = [];
+  List<Widget> activitiesList = [];
+
+  GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   double targetValue = 24;
 
   @override
   void initState() {
-    // TODO: implement initState
-    activities = [
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      addActivity();
+    });
+
+    super.initState();
+  }
+
+  void addActivity() {
+    List<Activity> _activities = [
       Activity(
         name: "Dating",
         location: "Goa",
@@ -28,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       Activity(
         name: "massage",
         location: "Goa",
-        imageUrl: "assets/img/massage.jpg",
+        imageUrl: "assets/img/massage.jpeg",
         price: 500,
       ),
       Activity(
@@ -44,8 +53,18 @@ class _HomePageState extends State<HomePage> {
         price: 500,
       ),
     ];
-    super.initState();
+    Future ft = Future(() {});
+    _activities.forEach((Activity activity) {
+      ft = ft.then((value) {
+        return Future.delayed(Duration(milliseconds: 500), () {
+          activitiesList.add(buildCard(activity));
+          _listKey.currentState!.insertItem(activitiesList.length - 1);
+        });
+      });
+    });
   }
+
+  Tween<Offset> _offSet = Tween(begin: Offset(1, 0), end: Offset(0, 0));
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +78,7 @@ class _HomePageState extends State<HomePage> {
 
           children: [
             TweenAnimationBuilder(
+              curve: Curves.easeIn,
               duration: Duration(seconds: 2),
               tween: Tween<double>(begin: 0, end: 1),
               child: AppText(
@@ -78,11 +98,14 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 20),
             Flexible(
-              child: ListView.builder(
-                itemCount: activities.length,
-                itemBuilder: (context, index) {
-                  Activity activity = activities[index];
-                  return buildCard(activity);
+              child: AnimatedList(
+                key: _listKey,
+                initialItemCount: activitiesList.length,
+                itemBuilder: (context, index, animation) {
+                  return SlideTransition(
+                    position: animation.drive(_offSet),
+                    child: activitiesList[index],
+                  );
                 },
               ),
             ),

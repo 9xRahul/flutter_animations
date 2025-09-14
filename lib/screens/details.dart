@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animations/models/activity_model.dart';
+import 'package:flutter_animations/widgets/heart.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 
 class Details extends StatelessWidget {
@@ -16,43 +16,45 @@ class Details extends StatelessWidget {
         elevation: 0,
       ),
       extendBodyBehindAppBar: true,
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Hero(
-              tag: 'activity-img-${activity!.imageUrl}',
-              child: Image.asset(
-                '${activity!.imageUrl}',
-                height: 460,
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
-              ),
-            ),
-            SizedBox(height: 30),
-            ListTile(
-              title: Text(
-                activity!.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.grey[800],
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Hero(
+                tag: 'activity-img-${activity!.imageUrl}',
+                child: Image.asset(
+                  activity!.imageUrl,
+                  height: 460,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
                 ),
               ),
-              subtitle: Text(
-                '\$${activity!.price} Only',
-                style: TextStyle(letterSpacing: 1),
+              SizedBox(height: 30),
+              ListTile(
+                title: Text(
+                  activity!.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                subtitle: Text(
+                  '\$${activity!.price} Only',
+                  style: TextStyle(letterSpacing: 1),
+                ),
+                trailing: Heart(),
               ),
-              //trailing: Heart(),
-            ),
-            Padding(
-              padding: EdgeInsets.all(18),
-              child: Text(
-                loremIpsum(words: 60, paragraphs: 3, initWithLorem: true),
-                style: TextStyle(color: Colors.grey[600], height: 1.4),
+              Padding(
+                padding: EdgeInsets.all(18),
+                child: Text(
+                  loremIpsum(words: 60, paragraphs: 3, initWithLorem: true),
+                  style: TextStyle(color: Colors.grey[600], height: 1.4),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
